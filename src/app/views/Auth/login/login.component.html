@@ -1,1 +1,65 @@
-<p>login works!</p>
+<div class="flex gap-y-8 w-screen h-screen flex-col justify-center m-auto max-w-[90%] md:max-w-[42%]">
+    <div class="flex flex-col gap-y-4">
+      <img cImg width="80" height="80" src="./logo.jpg" alt="Logo" />
+      <h1 class="text-3xl font-bold text-gray-700">Welcome Back</h1>
+      <p class="text-gray-400 text-sm">Log to your account</p>
+    </div>
+    <div class="flex flex-col">
+      <form cForm>
+        <div class="flex flex-col gap-y-3">
+          <!-- Email Field -->
+          <div class="flex flex-col gap-y-2">
+            <label cLabel class="font-bold text-gray-700 block" for="email">Email address</label>
+            <input
+              cFormControl
+              class="rounded-none w-full bg-purple-100 px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              type="email"
+              id="email"
+              placeholder="Email address"
+              name="email"
+              required
+            />
+          </div>
+  
+          <!-- Password Field -->
+          <div class="flex flex-col gap-y-2">
+            <label class="font-bold text-gray-700 block" for="password">Password</label>
+            <input
+              cFormControl
+              class="rounded-none w-full bg-purple-100 px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              type="password"
+              id="password"
+              placeholder="Password"
+              name="password"
+              required
+            />
+          </div>
+  
+          <!-- Login Button -->
+          <div>
+            <button
+              cButton
+              class="bg-purple-800 py-[10px] mt-6 text-white w-full rounded-none hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              type="submit"
+            >
+              Login
+            </button>
+          </div>
+  
+          <!-- Additional Links -->
+          <div class="text-center flex flex-col gap-y-1 mt-3">
+            <div>
+              <p class="text-purple-500 text-md cursor-pointer">Forgot Password?</p>
+            </div>
+            <div>
+              <p>
+                Don't have an account?
+                <span class="text-purple-500 underline cursor-pointer">Register</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  

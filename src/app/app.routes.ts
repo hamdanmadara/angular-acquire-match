@@ -2,7 +2,9 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './views/Auth/login/login.component';
 import { RegisterComponent } from './views/Auth/register/register.component';
 import { CreateOrganizationComponent } from './views/Auth/create-organization/create-organization.component';
-
+// import '@coreui/coreui/dist/css/coreui.min.css'
+// import "@coreui/coreui/scss/coreui";
+// import "tailwindcss/tailwind.css";
 export const routes: Routes = [
     {
         path: '',

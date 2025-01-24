@@ -1,1 +1,109 @@
-<p>create-organization works!</p>
+<div class="flex gap-y-8 w-screen h-screen flex-col justify-center m-auto max-w-[90%] md:max-w-[50%]">
+    <div class="flex flex-col gap-y-4">
+      <img cImg width="80" height="80" src="./logo.jpg" alt="Logo" />
+      <h1 class="text-3xl font-bold text-gray-700">Create Organization</h1>
+      <p class="text-gray-400 text-sm">Set up your organization account</p>
+    </div>
+    <div class="flex flex-col">
+      <form cForm>
+        <div class="flex flex-col gap-y-3">
+          <!-- First Row -->
+          <div class="flex flex-col lg:flex-row gap-x-4">
+            <div class="flex flex-1 flex-col">
+              <label cLabel class="font-bold text-gray-700" for="orgname">
+                Organization Name
+              </label>
+              <input
+                cFormControl
+                class="rounded-none bg-purple-100 w-full py-2 px-3 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                type="text"
+                id="orgname"
+                placeholder="Enter name"
+                name="orgname"
+                required
+              />
+            </div>
+            <div class="flex flex-1 flex-col">
+              <label cLabel class="font-bold text-gray-700" for="orgemail">
+                Organization Email
+              </label>
+              <input
+                cFormControl
+                class="rounded-none bg-purple-100 w-full py-2 px-3 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                type="email"
+                id="orgemail"
+                placeholder="Enter email"
+                name="orgemail"
+                required
+              />
+            </div>
+            <div class="flex flex-1 flex-col">
+              <label cLabel class="font-bold text-gray-700" for="adminname">
+                Admin Name
+              </label>
+              <input
+                cFormControl
+                class="rounded-none bg-purple-100 w-full py-2 px-3 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                type="text"
+                id="adminname"
+                placeholder="Enter admin name"
+                name="adminname"
+                required
+              />
+            </div>
+          </div>
+          <!-- Second Row -->
+          <div class="flex flex-col lg:flex-row gap-x-4">
+            <div class="flex flex-1 flex-col">
+              <label cLabel class="font-bold text-gray-700" for="adminemail">
+                Admin Email
+              </label>
+              <input
+                cFormControl
+                class="rounded-none bg-purple-100 w-full py-2 px-3 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                type="email"
+                id="adminemail"
+                placeholder="Enter Admin email"
+                name="adminemail"
+                required
+              />
+            </div>
+            <div class="flex flex-1 flex-col">
+              <label cLabel class="font-bold text-gray-700" for="adminpassword">
+                Admin Password
+              </label>
+              <input
+                cFormControl
+                class="rounded-none bg-purple-100 w-full py-2 px-3 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                type="password"
+                id="adminpassword"
+                placeholder="Create Password"
+                name="adminpassword"
+                required
+              />
+            </div>
+          </div>
+          <!-- Submit Button -->
+          <div>
+            <button
+              cButton
+              class="bg-purple-800 py-2 mt-6 text-white w-full rounded-none hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              type="submit"
+            >
+              Create Organization
+            </button>
+          </div>
+          <!-- Login Link -->
+          <div class="text-center flex flex-col mt-3">
+            <div class="text-center">
+              <p>
+                Already have an account?
+                <span class="text-purple-500 underline cursor-pointer">Login</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  

@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './views/Auth/login/login.component';
-import { RegisterComponent } from './views/Auth/register/register.component';
-import { CreateOrganizationComponent } from './views/Auth/create-organization/create-organization.component';
+import { AuthGuard } from './shared/_guards/authGuard';
+import { LoginGuard } from './shared/_guards/loginGuard';
 // import '@coreui/coreui/dist/css/coreui.min.css'
 // import "@coreui/coreui/scss/coreui";
 // import "tailwindcss/tailwind.css";
@@ -13,7 +12,8 @@ export const routes: Routes = [
     {
         path: 'login',
         loadComponent: () => import('./views/Auth/login/login.component')
-          .then(mod => mod.LoginComponent)
+          .then(mod => mod.LoginComponent),
+          canActivate:[LoginGuard]
     },
     {
         path: 'register',
@@ -24,5 +24,11 @@ export const routes: Routes = [
         path: 'create-organization',
         loadComponent: () => import('./views/Auth/create-organization/create-organization.component')
           .then(mod => mod.CreateOrganizationComponent)
+    },
+    {
+        path: 'user/profile',
+        loadComponent: () => import('./views/Recruiter/Profile/profile.component')
+          .then(mod => mod.ProfileComponent),
+          canActivate:[AuthGuard]
     }
 ];

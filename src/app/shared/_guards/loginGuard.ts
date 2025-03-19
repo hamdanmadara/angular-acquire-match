@@ -17,7 +17,7 @@ export class LoginGuard implements CanActivate {
     // Use the AuthService method to check login status
     if (this.authService.isLoggedIn()) {
       // If logged in, redirect to home
-      this.router.navigate(['/user/profile']);
+      this.router.navigate(['/recruiter/dashboard']);
       return false;
     } else {
       return true; // Allow access to the login page

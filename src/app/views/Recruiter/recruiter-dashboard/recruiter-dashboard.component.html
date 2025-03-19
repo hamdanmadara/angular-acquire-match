@@ -1,0 +1,320 @@
+<div class="bg-gray-50 min-h-screen p-4 md:p-6">
+    <!-- Loading state -->
+    <div *ngIf="loading" class="flex flex-col items-center justify-center min-h-[400px]">
+      <div class="w-12 h-12 border-4 border-gray-300 border-t-indigo-600 rounded-full animate-spin mb-4"></div>
+      <p class="text-gray-600 text-lg">Loading dashboard data...</p>
+    </div>
+  
+    <!-- Error state -->
+    <div *ngIf="error" class="flex flex-col items-center justify-center min-h-[400px] text-center p-6">
+      <div class="text-red-500 text-6xl mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+      </div>
+      <h2 class="text-2xl font-bold mb-2">Oops! Something went wrong</h2>
+      <p class="text-gray-600 mb-6">{{ errorMessage }}</p>
+      <button (click)="retry()" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition-colors">
+        Try Again
+      </button>
+    </div>
+  
+    <!-- Dashboard content -->
+    <div *ngIf="!loading && !error && dashboardData" class="max-w-7xl mx-auto">
+      <h1 class="text-3xl font-semibold text-indigo-700 mb-8">Recruiter Dashboard</h1>
+      
+      <!-- Summary cards -->
+      <div class="mb-8">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-semibold text-gray-800">Summary</h2>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <!-- Active Jobs Card -->
+          <div class="bg-white rounded-lg shadow p-5 flex items-center">
+            <div class="bg-indigo-100 text-indigo-600 p-3 rounded-full mr-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500">Active Jobs</p>
+              <p class="text-2xl font-bold">{{ dashboardData.summaryMetrics.active_jobs }}</p>
+            </div>
+          </div>
+          
+          <!-- Total Applications Card -->
+          <div class="bg-white rounded-lg shadow p-5 flex items-center">
+            <div class="bg-amber-100 text-amber-600 p-3 rounded-full mr-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500">Total Applications</p>
+              <p class="text-2xl font-bold">{{ dashboardData.summaryMetrics.total_applications }}</p>
+            </div>
+          </div>
+          
+          <!-- Pending Applications Card -->
+          <div class="bg-white rounded-lg shadow p-5 flex items-center">
+            <div class="bg-blue-100 text-blue-600 p-3 rounded-full mr-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500">Pending Applications</p>
+              <p class="text-2xl font-bold">{{ dashboardData.summaryMetrics.pending_applications }}</p>
+            </div>
+          </div>
+          
+          <!-- Avg Match Score Card -->
+          <div class="bg-white rounded-lg shadow p-5 flex items-center">
+            <div class="bg-green-100 text-green-600 p-3 rounded-full mr-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500">Avg Match Score</p>
+              <p class="text-2xl font-bold">{{ roundNumber(dashboardData.summaryMetrics.avg_match_score) }}%</p>
+            </div>
+          </div>
+          
+          <!-- Shortlisted Candidates Card -->
+          <div class="bg-white rounded-lg shadow p-5 flex items-center">
+            <div class="bg-purple-100 text-purple-600 p-3 rounded-full mr-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500">Shortlisted</p>
+              <p class="text-2xl font-bold">{{ dashboardData.summaryMetrics.shortlisted_candidates }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Top candidates section -->
+      <div class="bg-white rounded-lg shadow mb-8">
+        <div class="p-6 border-b">
+          <h2 class="text-xl font-semibold text-gray-800">Top Candidates</h2>
+        </div>
+        
+        <div *ngIf="dashboardData.topCandidates.length === 0" class="flex flex-col items-center justify-center p-12">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+          <p class="text-gray-600 text-lg">No candidates available yet</p>
+        </div>
+        
+        <div *ngIf="dashboardData.topCandidates.length > 0" class="overflow-x-auto">
+          <table class="min-w-full">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="py-3 px-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                <th class="py-3 px-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                <th class="py-3 px-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Job Position</th>
+                <th class="py-3 px-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Match Score</th>
+                <th class="py-3 px-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th class="py-3 px-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr *ngFor="let candidate of dashboardData.topCandidates" class="hover:bg-gray-50">
+                <td class="py-4 px-4 whitespace-nowrap">{{ candidate.candidate_name }}</td>
+                <td class="py-4 px-4 whitespace-nowrap">{{ candidate.candidate_email }}</td>
+                <td class="py-4 px-4 whitespace-nowrap">{{ candidate.job_title }}</td>
+                <td class="py-4 px-4 whitespace-nowrap">
+                  <span 
+                    [ngClass]="{
+                      'bg-green-100 text-green-800': parseFloat(candidate.match_score) >= 80,
+                      'bg-amber-100 text-amber-800': parseFloat(candidate.match_score) >= 70 && parseFloat(candidate.match_score) < 80,
+                      'bg-red-100 text-red-800': parseFloat(candidate.match_score) < 70
+                    }"
+                    class="px-3 py-1 text-sm rounded-full">
+                    {{ candidate.match_score }}%
+                  </span>
+                </td>
+                <td class="py-4 px-4 whitespace-nowrap">
+                  <span 
+                    [ngClass]="{
+                      'bg-green-100 text-green-800': candidate.status === 'active',
+                      'bg-amber-100 text-amber-800': candidate.status === 'pending',
+                      'bg-blue-100 text-blue-800': candidate.status === 'shortlisted',
+                      'bg-red-100 text-red-800': candidate.status === 'rejected'
+                    }"
+                    class="px-3 py-1 text-sm rounded-full capitalize">
+                    {{ candidate.status }}
+                  </span>
+                </td>
+                <td class="py-4 px-4 whitespace-nowrap text-sm">
+                  <button title="View Details" class="text-indigo-600 hover:text-indigo-900 mr-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  </button>
+                  <button title="Shortlist Candidate" class="text-green-600 hover:text-green-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <!-- Job listings section -->
+      <div class="mb-8">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-semibold text-gray-800">Active Job Listings</h2>
+        </div>
+        
+        <div *ngIf="dashboardData.jobListings.length === 0" class="bg-white rounded-lg shadow flex flex-col items-center justify-center p-12">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+          <p class="text-gray-600 text-lg">No active job listings available</p>
+        </div>
+        
+        <div *ngIf="dashboardData.jobListings.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div *ngFor="let job of dashboardData.jobListings" class="bg-white rounded-lg shadow">
+            <div class="p-6 border-b">
+              <div class="flex justify-between items-start">
+                <h3 class="text-lg font-medium text-gray-900">{{ job.title }}</h3>
+                <span 
+                  [ngClass]="{
+                    'bg-green-100 text-green-800': job.status === 'active',
+                    'bg-gray-100 text-gray-800': job.status !== 'active'
+                  }"
+                  class="px-3 py-1 text-xs rounded-full capitalize">
+                  {{ job.status }}
+                </span>
+              </div>
+              <p class="text-sm text-gray-500 mt-2">Job ID: #{{ job.id }}</p>
+              <p class="text-sm text-gray-500">Posted: {{ formatDate(job.created_at) }}</p>
+            </div>
+            <div class="p-6">
+              <div class="flex justify-between text-sm mb-4">
+                <div class="flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                  <span>{{ job.application_count }} applications</span>
+                </div>
+                <div class="flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                  <span>{{ job.avg_match_score }}% avg match</span>
+                </div>
+              </div>
+              <div class="flex space-x-3">
+                <button class="flex-1 bg-indigo-600 text-white px-4 py-2 rounded text-sm font-medium hover:bg-indigo-700 transition-colors">
+                  View Applications
+                </button>
+                <button class="flex-1 bg-gray-100 text-gray-800 px-4 py-2 rounded text-sm font-medium hover:bg-gray-200 transition-colors">
+                  Edit Job
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Recent applications section -->
+      <div class="bg-white rounded-lg shadow mb-8">
+        <div class="p-6 border-b">
+          <h2 class="text-xl font-semibold text-gray-800">Recent Applications</h2>
+        </div>
+        
+        <div *ngIf="dashboardData.recentApplications.length === 0" class="flex flex-col items-center justify-center p-12">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <p class="text-gray-600 text-lg">No recent applications available</p>
+        </div>
+        
+        <div *ngIf="dashboardData.recentApplications.length > 0" class="divide-y divide-gray-200">
+          <div *ngFor="let application of dashboardData.recentApplications" class="flex items-center p-4 hover:bg-gray-50">
+            <div class="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center font-semibold text-lg mr-4">
+              {{ application.candidate_name.charAt(0) }}
+            </div>
+            <div class="flex-1">
+              <h3 class="text-lg font-medium text-gray-900">{{ application.candidate_name }}</h3>
+              <p class="text-sm text-gray-600">Applied for {{ application.job_title }}</p>
+              <p class="text-xs text-gray-500">{{ formatDate(application.created_at) }}</p>
+            </div>
+            <div class="text-center mx-6">
+              <span 
+                [ngClass]="{
+                  'bg-green-100 text-green-800': parseFloat(application.match_score) >= 80,
+                  'bg-amber-100 text-amber-800': parseFloat(application.match_score) >= 70 && parseFloat(application.match_score) < 80,
+                  'bg-red-100 text-red-800': parseFloat(application.match_score) < 70
+                }"
+                class="px-3 py-1 text-sm rounded-full">
+                {{ application.match_score }}%
+              </span>
+              <p class="text-xs text-gray-500 mt-1">Match Score</p>
+            </div>
+            <div class="mx-6">
+              <span 
+                [ngClass]="{
+                  'bg-green-100 text-green-800': application.status === 'active',
+                  'bg-amber-100 text-amber-800': application.status === 'pending',
+                  'bg-blue-100 text-blue-800': application.status === 'shortlisted',
+                  'bg-red-100 text-red-800': application.status === 'rejected'
+                }"
+                class="px-3 py-1 text-sm rounded-full capitalize">
+                {{ application.status }}
+              </span>
+            </div>
+            <button title="View Application" class="text-indigo-600 hover:text-indigo-900">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Application Trends Chart Placeholder -->
+      <div class="bg-white rounded-lg shadow">
+        <div class="p-6 border-b">
+          <h2 class="text-xl font-semibold text-gray-800">Application Trends</h2>
+        </div>
+        
+        <div *ngIf="dashboardData.applicationTrends.length === 0" class="flex flex-col items-center justify-center p-12">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+          <p class="text-gray-600 text-lg">No trend data available yet</p>
+        </div>
+        
+        <div *ngIf="dashboardData.applicationTrends.length > 0" class="p-6 flex items-center justify-center h-64">
+          <p class="text-gray-500 text-center">
+            Chart placeholder - integrate a chart library like Chart.js or NgxCharts here to display application trends
+          </p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- No data state -->
+    <div *ngIf="!loading && !error && !dashboardData" class="flex flex-col items-center justify-center min-h-[400px] text-center p-6">
+      <div class="text-gray-400 text-6xl mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+        </svg>
+      </div>
+      <h2 class="text-2xl font-bold mb-2">No Dashboard Data Available</h2>
+      <p class="text-gray-600 mb-6">We couldn't find any recruitment data for your dashboard.</p>
+      <button (click)="retry()" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition-colors">
+        Refresh
+      </button>
+    </div>
+  </div>

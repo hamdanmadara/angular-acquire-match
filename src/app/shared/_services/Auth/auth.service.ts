@@ -1,19 +1,40 @@
-import { Inject, Injectable, NgZone, PLATFORM_ID } from '@angular/core';
+// src/app/auth/services/auth.service.ts
+
+import { inject, Injectable, NgZone, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
-import { BehaviorSubject, catchError, map, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, throwError } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
+
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private tokenMemory: string | null = null;
+  private userInfoMemory: User | null = null;
+  private platformId = inject(PLATFORM_ID);
+  private http = inject(HttpClient);
+  
+  // Observable to track user authentication state
+  private userSubject = new BehaviorSubject<User | null>(null);
+  public user$ = this.userSubject.asObservable();
 
-  constructor(
-    private http: HttpClient,
-    @Inject(PLATFORM_ID) private platformId: Object
-  ) { }
+  constructor() {
+    // Initialize user from localStorage if available
+    if (this.isBrowser) {
+      const userData = this.getUserInfo();
+      if (userData) {
+        this.userSubject.next(userData);
+      }
+    }
+  }
 
   private get isBrowser(): boolean {
     return isPlatformBrowser(this.platformId);
@@ -55,6 +76,49 @@ export class AuthService {
     );
   }
 
+  // Store user info in local storage
+  storeUserInfo(user: User): void {
+    this.userInfoMemory = user;
+    this.userSubject.next(user);
+    
+    if (this.isBrowser) {
+      try {
+        localStorage.setItem('user', JSON.stringify(user));
+      } catch (e) {
+        console.warn('localStorage not available');
+      }
+    }
+  }
+
+  // Get user info from local storage
+  getUserInfo(): User | null {
+    if (this.isBrowser) {
+      try {
+        const userData = localStorage.getItem('user');
+        if (userData) {
+          return JSON.parse(userData);
+        }
+        return null;
+      } catch (e) {
+        console.warn('localStorage not available');
+        return this.userInfoMemory;
+      }
+    }
+    return this.userInfoMemory;
+  }
+
+  // Get current user role
+  getUserRole(): string | null {
+    const user = this.getUserInfo();
+    return user ? user.role : null;
+  }
+
+  // Check if user has specific role
+  hasRole(role: string): boolean {
+    const userRole = this.getUserRole();
+    return userRole === role;
+  }
+
   storeToken(token: string): void {
     this.tokenMemory = token;
     
@@ -80,7 +144,13 @@ export class AuthService {
   }
   
   isLoggedIn(): boolean {
-    return !!this.getToken();
+    return !!this.getToken() && !!this.getUserInfo();
+  }
+
+  logout(): void {
+    this.clearToken();
+    this.clearUserInfo();
+    this.userSubject.next(null);
   }
 
   clearToken(): void {
@@ -89,6 +159,18 @@ export class AuthService {
     if (this.isBrowser) {
       try {
         localStorage.removeItem('token');
+      } catch (e) {
+        console.warn('localStorage not available');
+      }
+    }
+  }
+
+  clearUserInfo(): void {
+    this.userInfoMemory = null;
+    
+    if (this.isBrowser) {
+      try {
+        localStorage.removeItem('user');
       } catch (e) {
         console.warn('localStorage not available');
       }

@@ -1,0 +1,172 @@
+<!-- src/app/jobs/job-listings/job-listings.component.html -->
+
+<div class="job-listings-container">
+    <div class="header">
+      <h1 class="title">My Job Postings</h1>
+      <div class="actions">
+        <a [routerLink]="['/recruiter/create-job']" class="btn-create">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Create New Job
+        </a>
+      </div>
+    </div>
+  
+    <!-- Success/Error Messages -->
+    <div *ngIf="successMessage" class="alert success">
+      <div class="alert-content">
+        <span class="alert-icon">✓</span>
+        <span>{{ successMessage }}</span>
+      </div>
+    </div>
+  
+    <div *ngIf="error" class="alert error">
+      <div class="alert-content">
+        <span class="alert-icon">!</span>
+        <span>{{ error }}</span>
+      </div>
+    </div>
+  
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-container">
+      <app-loader size="8" text="Loading your job postings..."></app-loader>
+    </div>
+  
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && jobs.length === 0" class="empty-state">
+      <div class="empty-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+        </svg>
+      </div>
+      <h3>No job postings yet</h3>
+      <p>Create your first job posting to start receiving applications</p>
+      <a [routerLink]="['/jobs/create']" class="btn-create-empty">Create Your First Job</a>
+    </div>
+  
+    <!-- Job Listings Table -->
+    <div *ngIf="!isLoading && jobs.length > 0" class="table-container">
+      <table class="jobs-table">
+        <thead>
+          <tr>
+            <th>Job Title</th>
+            <th>Company</th>
+            <th>Status</th>
+            <th>Created Date</th>
+            <th>Application Link</th>
+            <th>Applicants</th>
+            <th class="actions-column">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let job of jobs">
+            <td class="job-title-cell">
+              <div style="" class="job-title" [title]="job.title">{{ job.title }}</div>
+            </td>
+            <td>{{ job.company }}</td>
+            <td>
+              <span class="status-badge" [ngClass]="getStatusClass(job.status)">
+                {{ job.status }}
+              </span>
+            </td>
+            <td>{{ formatDate(job.created_at) }}</td>
+            <td class="link-cell">
+              <div class="copy-link">
+                <input 
+                  type="text" 
+                  class="link-input" 
+                  [value]="jobService.getJobApplicationUrl(job.job_link)" 
+                  readonly 
+                  #jobLink
+                />
+                <button 
+                  class="btn-copy" 
+                  (click)="copyJobLink(job)" 
+                  [class.copied]="copiedLinkId === job.id"
+                  [title]="copiedLinkId === job.id ? 'Copied!' : 'Copy link'"
+                >
+                  <svg *ngIf="copiedLinkId !== job.id" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <svg *ngIf="copiedLinkId === job.id" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </td>
+            <td><a (click)="goToSubmitJobs(job.id)" style="cursor: pointer;">View all applicants</a></td>            <td class="actions-cell">
+              <div class="dropdown">
+                <button class="btn-actions" (click)="toggleActionMenu(job.id)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="1"></circle>
+                    <circle cx="12" cy="5" r="1"></circle>
+                    <circle cx="12" cy="19" r="1"></circle>
+                  </svg>
+                </button>
+                <div class="dropdown-menu" [class.active]="activeActionMenuId === job.id">
+                  <a [routerLink]="['/jobs/edit', job.id]" class="dropdown-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                    Edit
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <div class="dropdown-submenu">
+                    <div class="dropdown-item submenu-trigger">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                      </svg>
+                      Change Status
+                      <svg class="submenu-arrow" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                      </svg>
+                    </div>
+                    <div class="submenu">
+                      <button
+                        class="submenu-item"
+                        [class.active]="job.status === 'active'"
+                        (click)="updateJobStatus(job, 'active')"
+                      >
+                        Active
+                      </button>
+                      <button
+                        class="submenu-item"
+                        [class.active]="job.status === 'draft'"
+                        (click)="updateJobStatus(job, 'draft')"
+                      >
+                        Draft
+                      </button>
+                      <button
+                        class="submenu-item"
+                        [class.active]="job.status === 'closed'"
+                        (click)="updateJobStatus(job, 'closed')"
+                      >
+                        Closed
+                      </button>
+                    </div>
+                  </div>
+                  <div class="dropdown-divider"></div>
+                  <button class="dropdown-item delete" (click)="deleteJob(job.id)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="3 6 5 6 21 6"></polyline>
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                      <line x1="10" y1="11" x2="10" y2="17"></line>
+                      <line x1="14" y1="11" x2="14" y2="17"></line>
+                    </svg>
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>

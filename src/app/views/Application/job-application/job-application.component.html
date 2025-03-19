@@ -1,0 +1,246 @@
+<!-- src/app/views/Application/job-application/job-application.component.html -->
+
+<div class="job-application-container">
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-container">
+      <app-loader size="8" text="Loading job details..."></app-loader>
+    </div>
+  
+    <!-- Error State -->
+    <div *ngIf="error && !isLoading" class="error-container">
+      <div class="error-message">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <p>{{ error }}</p>
+      </div>
+      <button class="btn-retry" (click)="loadJobDetails()">Try Again</button>
+    </div>
+  
+    <!-- Job Application Content -->
+    <div *ngIf="!isLoading && !error && jobData" class="job-application-content">
+      <header class="job-header">
+        <h1 class="job-title">{{ jobData.job.title }}</h1>
+        <div class="job-meta">
+          <div class="company-name">{{ jobData.job.company }}</div>
+          <div class="job-date">Posted on {{ formatDate(jobData.job.created_at) }}</div>
+        </div>
+      </header>
+  
+      <!-- Tab Navigation -->
+      <div class="tabs-container">
+        <div class="tabs">
+          <button 
+            class="tab-button" 
+            [class.active]="activeTab === 'details'"
+            (click)="switchTab('details')"
+          >
+            Job Details
+          </button>
+          <button 
+            class="tab-button" 
+            [class.active]="activeTab === 'apply'"
+            (click)="switchTab('apply')"
+          >
+            Apply Now
+          </button>
+        </div>
+      </div>
+  
+      <!-- Tab Content -->
+      <div class="tab-content">
+        <!-- Job Details Tab -->
+        <div *ngIf="activeTab === 'details'" class="tab-pane details-pane">
+          <div class="job-description">
+            <h2 class="section-title">Job Description</h2>
+            
+            <div class="description-content">
+              <p>{{ jobData.job.description }}</p>
+            </div>
+            
+            <!-- PDF Viewer -->
+            <!-- PDF Viewer -->
+            <!-- PDF Viewer -->
+            <div class="pdf-container" *ngIf="pdfViewUrl">
+                <h3 class="pdf-title">Job Description Document</h3>
+                <div class="pdf-viewer">
+                <iframe [src]="pdfViewUrl | safeUrl" width="100%" height="600px" frameborder="0"></iframe>
+                <div class="pdf-fallback">
+                    <p>If the PDF doesn't display properly, you can 
+                    <a [href]="pdfViewUrl | safeUrl" target="_blank">open it in a new tab</a>
+                    </p>
+                </div>
+                </div>
+            </div>
+          </div>
+  
+          <div class="job-recruiter">
+            <h2 class="section-title">About the Recruiter</h2>
+            <p>This position is being recruited by <strong>{{ jobData.job.recruiter_name }}</strong>.</p>
+          </div>
+  
+          <div class="apply-now-cta">
+            <button class="btn-apply" (click)="switchTab('apply')">Apply Now</button>
+          </div>
+        </div>
+  
+        <!-- Apply Now Tab -->
+        <div *ngIf="activeTab === 'apply'" class="tab-pane apply-pane">
+          <!-- Success Message -->
+          <div *ngIf="successMessage" class="success-message">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            <p>{{ successMessage }}</p>
+          </div>
+  
+          <!-- Error Message -->
+          <div *ngIf="error" class="form-error-message">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <p>{{ error }}</p>
+          </div>
+  
+          <!-- Application Form -->
+          <form [formGroup]="applicationForm" (ngSubmit)="onSubmit()" class="application-form">
+            <h2 class="form-section-title">Personal Information</h2>
+            
+            <div class="form-group">
+              <label for="name">Full Name <span class="required">*</span></label>
+              <input 
+                type="text" 
+                id="name" 
+                formControlName="name" 
+                [class.invalid]="isFieldInvalid('name')"
+                placeholder="Enter your full name"
+              >
+              <div *ngIf="isFieldInvalid('name')" class="error-text">
+                Please enter your full name.
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="email">Email Address <span class="required">*</span></label>
+              <input 
+                type="email" 
+                id="email" 
+                formControlName="email" 
+                [class.invalid]="isFieldInvalid('email')"
+                placeholder="Enter your email address"
+              >
+              <div *ngIf="isFieldInvalid('email')" class="error-text">
+                Please enter a valid email address.
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="phone">Phone Number <span class="required">*</span></label>
+              <input 
+                type="tel" 
+                id="phone" 
+                formControlName="phone" 
+                [class.invalid]="isFieldInvalid('phone')"
+                placeholder="Enter your phone number"
+              >
+              <div *ngIf="isFieldInvalid('phone')" class="error-text">
+                Please enter a valid phone number (at least 10 digits).
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="resume">Resume <span class="required">*</span></label>
+              <div class="resume-upload-container">
+                <div class="resume-upload-area" (click)="resumeInput.click()" [class.has-file]="resumeSelected">
+                  <div class="upload-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                      <polyline points="17 8 12 3 7 8"></polyline>
+                      <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                  </div>
+                  <div class="upload-text">
+                    <span *ngIf="!resumeSelected">Upload your resume (PDF, DOC, DOCX)</span>
+                    <span *ngIf="resumeSelected" class="file-name">{{ resumeFileName }}</span>
+                  </div>
+                  <input 
+                    #resumeInput 
+                    type="file" 
+                    id="resume" 
+                    accept=".pdf,.doc,.docx" 
+                    style="display: none;" 
+                    (change)="onResumeSelected($event)"
+                  >
+                </div>
+                
+                <div class="resume-actions" *ngIf="resumeSelected">
+                  <button type="button" class="btn-clear" (click)="clearResume()">
+                    Remove
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <h2 class="form-section-title">Application Questions</h2>
+            
+            <div *ngFor="let question of jobData.questions" class="question-form-group">
+              <label [for]="'question_' + question.id">
+                {{ question.question_text }}
+                <span *ngIf="question.is_required === 1" class="required">*</span>
+              </label>
+              
+              <!-- Text input for text questions -->
+              <div *ngIf="question.question_type === 'text'">
+                <input 
+                  type="text" 
+                  [id]="'question_' + question.id" 
+                  [formControlName]="'question_' + question.id" 
+                  [class.invalid]="isFieldInvalid('question_' + question.id)"
+                  placeholder="Your answer"
+                >
+                <div *ngIf="isFieldInvalid('question_' + question.id)" class="error-text">
+                  This field is required.
+                </div>
+              </div>
+              
+              <!-- Radio buttons for multiple choice questions -->
+              <div *ngIf="question.question_type === 'multiple_choice' && question.options" class="radio-group">
+                <div *ngFor="let option of question.options" class="radio-option">
+                  <input 
+                    type="radio" 
+                    [id]="'option_' + option.id" 
+                    [name]="'question_' + question.id"
+                    [formControlName]="'question_' + question.id"
+                    [value]="option.option_text"
+                  >
+                  <label [for]="'option_' + option.id">{{ option.option_text }}</label>
+                </div>
+                <div *ngIf="isFieldInvalid('question_' + question.id)" class="error-text">
+                  Please select an option.
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-actions">
+              <button type="button" class="btn-back" (click)="switchTab('details')">
+                Back to Details
+              </button>
+              <button 
+                type="submit" 
+                class="btn-submit"
+                [disabled]="isSubmitting"
+              >
+                <span *ngIf="!isSubmitting">Submit Application</span>
+                <app-loader *ngIf="isSubmitting" size="4" containerClass="flex justify-center items-center" text="Submitting..."></app-loader>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>

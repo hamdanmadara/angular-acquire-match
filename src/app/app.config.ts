@@ -1,5 +1,5 @@
 import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, RouterModule } from '@angular/router';
 
 import { routes } from './app.routes';
 import { BrowserModule, provideClientHydration, withEventReplay } from '@angular/platform-browser';
@@ -13,7 +13,7 @@ export const appConfig: ApplicationConfig = {
               provideHttpClient(withInterceptors(
                 [AuthInterceptor]
               )),
-              provideHttpClient(), // Use this instead of HttpClientModule
+              // provideHttpClient(), // Use this instead of HttpClientModule
               importProvidersFrom(BrowserModule), // If you need BrowserModule providers
             ]
 };

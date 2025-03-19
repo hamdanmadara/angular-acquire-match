@@ -1,0 +1,621 @@
+/* src/app/applications/job-application/job-application.component.scss */
+
+:host {
+    display: block;
+  }
+  
+  .job-application-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  
+  /* Loading and Error States */
+  .loading-container,
+  .error-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 0;
+    text-align: center;
+  }
+  
+  .error-message {
+    display: flex;
+    align-items: center;
+    color: #dc2626;
+    margin-bottom: 1.5rem;
+    
+    svg {
+      margin-right: 0.75rem;
+    }
+  }
+  
+  .btn-retry {
+    padding: 0.625rem 1.25rem;
+    background-color: #6b46c1;
+    color: white;
+    font-weight: 500;
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    
+    &:hover {
+      background-color: #5a32a3;
+    }
+  }
+  
+  /* Job Header */
+  .job-header {
+    margin-bottom: 2rem;
+    
+    .job-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 0.5rem;
+    }
+    
+    .job-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      color: #6b7280;
+      font-size: 0.875rem;
+      
+      .company-name {
+        font-weight: 500;
+      }
+    }
+  }
+  
+  /* Tabs */
+  .tabs-container {
+    margin-bottom: 1.5rem;
+    
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #e5e7eb;
+      
+      .tab-button {
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        color: #6b7280;
+        background: none;
+        border: none;
+        border-bottom: 2px solid transparent;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        
+        &:hover {
+          color: #111827;
+        }
+        
+        &.active {
+          color: #6b46c1;
+          border-bottom-color: #6b46c1;
+        }
+      }
+    }
+  }
+  
+  /* Tab Content */
+  .tab-content {
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    
+    .tab-pane {
+      padding: 1.5rem;
+    }
+  }
+  
+  /* Job Details Tab */
+  .details-pane {
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .job-description,
+    .job-recruiter {
+      margin-bottom: 2rem;
+    }
+    
+    .description-content {
+      line-height: 1.6;
+      color: #4b5563;
+      
+      p {
+        margin-bottom: 1rem;
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+    
+    .questions-preview {
+      .question-item {
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.375rem;
+        background-color: #f9fafb;
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
+        
+        .question-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 0.75rem;
+          
+          .question-text {
+            font-weight: 500;
+            color: #111827;
+          }
+          
+          .required-badge {
+            font-size: 0.75rem;
+            padding: 0.125rem 0.375rem;
+            background-color: #dc2626;
+            color: white;
+            border-radius: 0.25rem;
+          }
+        }
+        
+        .question-type {
+          font-size: 0.75rem;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.25rem;
+          padding: 0.25rem 0.5rem;
+          border-radius: 0.25rem;
+          background-color: #e5e7eb;
+          color: #4b5563;
+          margin-bottom: 0.75rem;
+        }
+        
+        .question-options {
+          padding-left: 1rem;
+          
+          .option-item {
+            display: flex;
+            margin-bottom: 0.375rem;
+            
+            &:last-child {
+              margin-bottom: 0;
+            }
+            
+            .option-bullet {
+              margin-right: 0.5rem;
+              color: #6b46c1;
+            }
+            
+            .option-text {
+              color: #4b5563;
+            }
+          }
+        }
+      }
+    }
+    
+    .apply-now-cta {
+      text-align: center;
+      margin-top: 2rem;
+      
+      .btn-apply {
+        padding: 0.75rem 2rem;
+        background-color: #6b46c1;
+        color: white;
+        font-weight: 500;
+        border: none;
+        border-radius: 0.375rem;
+        cursor: pointer;
+        transition: background-color 0.15s ease;
+        
+        &:hover {
+          background-color: #5a32a3;
+        }
+      }
+    }
+  }
+  
+  /* Apply Now Tab */
+  .apply-pane {
+    .success-message {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      background-color: #e6f7ea;
+      border: 1px solid #c3e6cb;
+      color: #155724;
+      border-radius: 0.375rem;
+      margin-bottom: 1.5rem;
+      
+      svg {
+        margin-right: 0.75rem;
+        color: #155724;
+      }
+    }
+    
+    .form-error-message {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      background-color: #f8d7da;
+      border: 1px solid #f5c6cb;
+      color: #721c24;
+      border-radius: 0.375rem;
+      margin-bottom: 1.5rem;
+      
+      svg {
+        margin-right: 0.75rem;
+        color: #721c24;
+      }
+    }
+    
+    .form-section-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: #111827;
+      margin: 2rem 0 1.25rem;
+      
+      &:first-of-type {
+        margin-top: 0;
+      }
+    }
+    
+    .application-form {
+      .form-group,
+      .question-form-group {
+        margin-bottom: 1.5rem;
+        
+        label {
+          display: block;
+          margin-bottom: 0.5rem;
+          font-weight: 500;
+          color: #111827;
+          
+          .required {
+            color: #dc2626;
+            margin-left: 0.25rem;
+          }
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        textarea {
+          width: 100%;
+          padding: 0.75rem;
+          border: 1px solid #d1d5db;
+          border-radius: 0.375rem;
+          background-color: #f9fafb;
+          transition: border-color 0.15s ease;
+          
+          &:focus {
+            outline: none;
+            border-color: #6b46c1;
+            box-shadow: 0 0 0 3px rgba(107, 70, 193, 0.1);
+          }
+          
+          &.invalid {
+            border-color: #dc2626;
+          }
+        }
+        
+        .error-text {
+          margin-top: 0.375rem;
+          font-size: 0.875rem;
+          color: #dc2626;
+        }
+        
+        .radio-group {
+          .radio-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            
+            &:last-child {
+              margin-bottom: 0;
+            }
+            
+            input[type="radio"] {
+              margin-right: 0.5rem;
+              accent-color: #6b46c1;
+            }
+            
+            label {
+              margin-bottom: 0;
+              font-weight: normal;
+            }
+          }
+        }
+      }
+      
+      .resume-upload-container {
+        .resume-upload-area {
+          border: 2px dashed #d1d5db;
+          border-radius: 0.375rem;
+          padding: 1.5rem;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.15s ease;
+          
+          &:hover {
+            border-color: #9ca3af;
+            background-color: #f9fafb;
+          }
+          
+          &.has-file {
+            border-color: #6b46c1;
+            background-color: rgba(107, 70, 193, 0.05);
+          }
+          
+          .upload-icon {
+            margin-bottom: 0.75rem;
+            color: #6b46c1;
+          }
+          
+          .upload-text {
+            text-align: center;
+            color: #6b7280;
+            
+            .file-name {
+              color: #6b46c1;
+              font-weight: 500;
+            }
+          }
+        }
+        
+        .resume-actions {
+          display: flex;
+          justify-content: center;
+          margin-top: 0.75rem;
+          
+          .btn-clear {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
+            background-color: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 0.25rem;
+            color: #4b5563;
+            cursor: pointer;
+            
+            &:hover {
+              background-color: #e5e7eb;
+            }
+          }
+        }
+      }
+      
+      .form-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #e5e7eb;
+        
+        .btn-back {
+          padding: 0.75rem 1.5rem;
+          background-color: white;
+          border: 1px solid #d1d5db;
+          border-radius: 0.375rem;
+          color: #4b5563;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.15s ease;
+          
+          &:hover {
+            background-color: #f9fafb;
+            border-color: #9ca3af;
+          }
+        }
+        
+        .btn-submit {
+          padding: 0.75rem 1.5rem;
+          background-color: #6b46c1;
+          color: white;
+          font-weight: 500;
+          border: none;
+          border-radius: 0.375rem;
+          cursor: pointer;
+          transition: background-color 0.15s ease;
+          
+          &:hover:not(:disabled) {
+            background-color: #5a32a3;
+          }
+          
+          &:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+          }
+        }
+      }
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .job-header {
+      .job-title {
+        font-size: 1.5rem;
+      }
+    }
+    
+    .tabs-container {
+      .tabs {
+        .tab-button {
+          padding: 0.625rem 1rem;
+          font-size: 0.875rem;
+        }
+      }
+    }
+    
+    .form-actions {
+      flex-direction: column;
+      gap: 1rem;
+      
+      button {
+        width: 100%;
+      }
+    }
+  }
+
+
+  /* Add these styles to job-application.component.scss */
+
+.pdf-loading {
+    display: flex;
+    justify-content: center;
+    padding: 2rem 0;
+  }
+  
+  .pdf-error {
+    padding: 1rem;
+    margin: 1rem 0;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 0.375rem;
+    
+    .error-text {
+      color: #721c24;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+  }
+  
+  .pdf-content {
+    .pdf-text {
+      line-height: 1.6;
+      color: #4b5563;
+      
+      p {
+        margin-bottom: 1rem;
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+    
+    .pdf-viewer {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e5e7eb;
+      
+      .pdf-download-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background-color: #f3f4f6;
+        border: 1px solid #d1d5db;
+        border-radius: 0.375rem;
+        color: #4b5563;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.15s ease;
+        
+        &:hover {
+          background-color: #e5e7eb;
+          border-color: #9ca3af;
+        }
+        
+        svg {
+          color: #6b46c1;
+        }
+      }
+    }
+  }
+
+
+  .jd-file-info {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background-color: #f3f4f6;
+    border-radius: 0.375rem;
+    
+    .jd-file-note {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: #4b5563;
+      
+      svg {
+        color: #6b46c1;
+        flex-shrink: 0;
+      }
+    }
+  }
+
+
+  /* Add these styles to your job-application.component.css file */
+
+.pdf-container {
+    margin-top: 2rem;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 1.5rem;
+  }
+  
+  .pdf-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 1rem;
+  }
+  
+  .pdf-viewer {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    overflow: hidden;
+    background-color: #f3f4f6;
+  }
+  
+  .pdf-viewer object {
+    display: block;
+    background-color: white;
+  }
+  
+  .pdf-viewer p {
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  .pdf-viewer a {
+    color: #6b46c1;
+    font-weight: 500;
+    text-decoration: underline;
+  }
+  
+  .jd-file-info {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background-color: #f3f4f6;
+    border-radius: 0.375rem;
+  }
+  
+  .jd-file-note {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #4b5563;
+  }
+  
+  .jd-file-note svg {
+    color: #6b46c1;
+    flex-shrink: 0;
+  }
